@@ -5,7 +5,7 @@ class Development(Config):
     OWNER_ID = 491634139 # my telegram ID
     OWNER_USERNAME = "Cricket9"  # my telegram username
     API_KEY = "511016924:AAHHmS_NafrmUawma9PpfRueQUEFAOY7BJw"  # my api key, as provided by the botfather
-    SQLALCHEMY_DATABASE_URI = 'postgresql://username:password@localhost:5432/database'  # sample db credentials
+    SQLALCHEMY_DATABASE_URI = 'postgresql://sures:9649335799@localhost:5432/minds'  # sample db credentials
     MESSAGE_DUMP = '-1001397779415' # some group chat that your bot is a member of
     USE_MESSAGE_DUMP = True
     STRICT_GMUTE = True
