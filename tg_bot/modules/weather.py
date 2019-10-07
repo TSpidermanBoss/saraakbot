@@ -3,7 +3,7 @@ from pyowm import timeutils, exceptions
 from telegram import Message, Chat, Update, Bot
 from telegram.ext import run_async
 
-from tg_bot import dispatcher, updater, API_WEATHER
+from tg_bot import dispatcher, updater
 from tg_bot.modules.disable import DisableAbleCommandHandler
 
 @run_async
@@ -19,7 +19,7 @@ def weather(bot, update, args):
         return
 
     try:
-        owm = pyowm.OWM(API_WEATHER)
+        owm = pyowm.OWM(os.environ.get('API_OPENWEATHER', "7db5e7eb9b71af318e45da286077dd37"))
         observation = owm.weather_at_place(location)
         getloc = observation.get_location()
         thelocation = getloc.get_name()
