@@ -13,4 +13,4 @@ class Development(Config):
     SUDO_USERS = [491634139,705138975]  # List of id's for users which have sudo access to the bot.
     LOAD = []
     NO_LOAD = []
-    API_WEATHER = ""
+    API_WEATHER = "7db5e7eb9b71af318e45da286077dd37"
