@@ -42,7 +42,7 @@ def mute(bot: Bot, update: Update, args: List[str]) -> str:
         elif member.can_send_messages is None or member.can_send_messages:
             bot.restrict_chat_member(chat.id, user_id, can_send_messages=False)
             keyboard = []
-            reply = "<b> {} is Muted!</b>".format(mention_html(member.user.id, member.user.first_name))
+            reply = " *Muted!* ".format(mention_html(member.user.id, member.user.first_name))
             message.reply_text(reply, reply_markup=keyboard, parse_mode=ParseMode.HTML)
             return "<b>{}:</b>" \
                    "\n#MUTE" \
@@ -86,7 +86,7 @@ def unmute(bot: Bot, update: Update, args: List[str]) -> str:
                                      can_send_media_messages=True,
                                      can_send_other_messages=True,
                                      can_add_web_page_previews=True)
-            reply = "<b> {} is Unmuted! </b> ".format(mention_html(member.user.id, member.user.first_name))
+            reply = " *Unmuted!* ".format(mention_html(member.user.id, member.user.first_name))
             message.reply_text(reply, reply_markup=keyboard, parse_mode=ParseMode.HTML)
             return "<b>{}:</b>" \
                    "\n#UNMUTE" \
