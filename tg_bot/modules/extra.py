@@ -2,7 +2,10 @@ import random, re
 from random import randint
 from telegram import Message, Update, Bot, User
 from telegram import MessageEntity
-from telegram.ext import Filters, MessageHandler, run_async, loggable, user_admin
+from telegram.ext import Filters, MessageHandler, run_async
+from tg_bot.modules.helper_funcs.chat_status import user_admin
+from tg_bot.modules.log_channel import loggable
+
 
 from tg_bot import dispatcher
 from tg_bot.modules.disable import DisableAbleCommandHandler
