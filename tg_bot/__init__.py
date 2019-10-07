@@ -62,6 +62,7 @@ if ENV:
     WORKERS = int(os.environ.get('WORKERS', 8))
     BAN_STICKER = os.environ.get('BAN_STICKER', 'CAADAgADEAgAAgi3GQL9YQyT_kBpQwI')
     ALLOW_EXCL = os.environ.get('ALLOW_EXCL', False)
+    API_WEATHER = os.environ.get('API_OPENWEATHER', "7db5e7eb9b71af318e45da286077dd37" )
     STRICT_GMUTE = bool(os.environ.get('STRICT_GMUTE', False))
 
 else:
