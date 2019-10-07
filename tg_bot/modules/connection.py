@@ -12,7 +12,8 @@ from tg_bot import dispatcher, LOGGER, SUDO_USERS
 from tg_bot.modules.helper_funcs.chat_status import bot_admin, user_admin, is_user_admin, can_restrict
 from tg_bot.modules.helper_funcs.extraction import extract_user, extract_user_and_text
 from tg_bot.modules.helper_funcs.string_handling import extract_time
-#from tg_bot.modules.log_channel import loggable
+
+# from tg_bot.modules.translations.strings import tld
 
 from tg_bot.modules.keyboard import keyboard
 
@@ -26,16 +27,16 @@ def allow_connections(bot: Bot, update: Update, args: List[str]) -> str:
             print(var)
             if (var == "no"):
                 sql.set_allow_connect_to_chat(chat.id, False)
-                update.effective_message.reply_text(chat.id, "Disabled connections to this chat for users")
+                update.effective_message.reply_text("Disabled connections to this chat for users")
             elif(var == "yes"):
                 sql.set_allow_connect_to_chat(chat.id, True)
-                update.effective_message.reply_text(chat.id, "Enabled connections to this chat for users")
+                update.effective_message.reply_text("Enabled connections to this chat for users")
             else:
-                update.effective_message.reply_text(chat.id, "Please enter on/yes/off/no in group!")
+                update.effective_message.reply_text("Please enter on/yes/off/no in group!")
         else:
-            update.effective_message.reply_text(chat.id, "Please enter on/yes/off/no in group!")
+            update.effective_message.reply_text("Please enter on/yes/off/no in group!")
     else:
-        update.effective_message.reply_text(chat.id, "Please enter on/yes/off/no in group!")
+        update.effective_message.reply_text("Please enter on/yes/off/no in group!")
 
 
 @run_async
@@ -47,7 +48,7 @@ def connect_chat(bot, update, args):
             try:
                 connect_chat = int(args[0])
             except ValueError:
-                update.effective_message.reply_text(chat.id, "Invalid Chat ID provided!")
+                update.effective_message.reply_text("Invalid Chat ID provided!")
             if (bot.get_chat_member(connect_chat, update.effective_message.from_user.id).status in ('administrator', 'creator') or 
                                      (sql.allow_connect_to_chat(connect_chat) == True) and 
                                      bot.get_chat_member(connect_chat, update.effective_message.from_user.id).status in ('member')) or (
@@ -56,7 +57,7 @@ def connect_chat(bot, update, args):
                 connection_status = sql.connect(update.effective_message.from_user.id, connect_chat)
                 if connection_status:
                     chat_name = dispatcher.bot.getChat(connected(bot, update, chat, user.id, need_admin=False)).title
-                    update.effective_message.reply_text("Succesfully Connected to given chat!")
+                    update.effective_message.reply_text("Successfully connected to *{}*".format(chat_name), parse_mode=ParseMode.MARKDOWN)
 
                     #Add chat to connection history
                     history = sql.get_history(user.id)
@@ -94,16 +95,16 @@ def connect_chat(bot, update, args):
                     keyboard(bot, update)
                     
                 else:
-                    update.effective_message.reply_text(chat.id, "Connection failed!")
+                    update.effective_message.reply_text("Connection failed!")
             else:
-                update.effective_message.reply_text(chat.id, "Connections to this chat not allowed!")
+                update.effective_message.reply_text("Connections to this chat not allowed!")
         else:
-            update.effective_message.reply_text(chat.id, "Write chat ID to connect!")
-            update.effective_message.reply_text(tld(chat.id, "Write chat ID to connect!"))
+            update.effective_message.reply_text("Input chat ID to connect!")
             history = sql.get_history(user.id)
             print(history.user_id, history.chat_id1, history.chat_id2, history.chat_id3, history.updated)
+
     else:
-        update.effective_message.reply_text(chat.id, "Usage limited to PMs only!")
+        update.effective_message.reply_text("Usage limited to PMs only!")
 
 
 def disconnect_chat(bot, update):
@@ -130,12 +131,12 @@ def connected(bot, update, chat, user_id, need_admin=True):
                 if bot.get_chat_member(conn_id, update.effective_message.from_user.id).status in ('administrator', 'creator') or user_id in SUDO_USERS:
                     return conn_id
                 else:
-                    update.effective_message.reply_text("You need be a admin in connected group!")
+                    update.effective_message.reply_text("You need to be a admin in a connected group!")
                     exit(1)
             else:
                 return conn_id
         else:
-            update.effective_message.reply_text("Group changed rights connection or you are not admin anymore.\nI disconnect you.")
+            update.effective_message.reply_text("Group changed rights connection or you are not admin anymore.\nI'll disconnect you.")
             disconnect_chat(bot, update)
             exit(1)
     else:
@@ -144,18 +145,12 @@ def connected(bot, update, chat, user_id, need_admin=True):
 
 
 __help__ = """
-You can connect to remote chat for see and edit notes
-Connections:
- - /connection <chatid>: Connect to remote chat for see and edit notes
 Actions are available with connected groups:
  • View and edit notes
  • View and edit filters
- • View and edit blacklists
- • Promote/demote users
- • See adminlist, see invitelink
  • More in future!
 
- - /connection <chatid>: Connect to remote chat
+ - /connect <chatid>: Connect to remote chat
  - /disconnect: Disconnect from chat
  - /allowconnect on/yes/off/no: Allow connect users to group
 """
@@ -169,4 +164,3 @@ ALLOW_CONNECTIONS_HANDLER = CommandHandler("allowconnect", allow_connections, al
 dispatcher.add_handler(CONNECT_CHAT_HANDLER)
 dispatcher.add_handler(DISCONNECT_CHAT_HANDLER)
 dispatcher.add_handler(ALLOW_CONNECTIONS_HANDLER)
-
