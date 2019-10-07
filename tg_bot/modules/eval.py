@@ -63,12 +63,12 @@ def send(msg, bot, update):
     LOGGER.info("OUT: '{}'".format(msg))
     bot.send_message(chat_id=update.effective_chat.id, text="`{}`".format(msg), parse_mode=ParseMode.MARKDOWN)
 
-@dev_plus
+
 @run_async
 def evaluate(bot, update):
     send(do(eval, bot, update), bot, update)
 
-@dev_plus
+
 @run_async
 def execute(bot, update):
     send(do(exec, bot, update), bot, update)
