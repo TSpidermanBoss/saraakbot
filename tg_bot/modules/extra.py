@@ -8,8 +8,6 @@ from tg_bot.modules.log_channel import loggable
 from tg_bot import dispatcher
 from tg_bot.modules.disable import DisableAbleCommandHandler
 
-msg = update.effective_message
-
 ABUSE_STRINGS = (
     "Fuck off",
     "Stfu go fuck yourself",
@@ -219,7 +217,7 @@ def shrug(bot: Bot, update: Update):
 def send(bot: Bot, update: Update):
     # reply to correct message
     reply_text = update.effective_message.reply_to_message.reply_text if update.effective_message.reply_to_message else update.effective_message.reply_text
-    reply_text(msg.text.split(None, 1))
+    reply_text( update.effective_message.text.split(None, 1))
 
 	
 @run_async
