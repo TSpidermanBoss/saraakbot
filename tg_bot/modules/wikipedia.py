@@ -6,11 +6,11 @@ from tg_bot.modules.disable import DisableAbleCommandHandler
 
 def wiki(bot: Bot, update: Update):
         query = str(update.effective_message.text[6:])
-        result = '**Búsqueda:**\n' + query + '\n\n**Resultado:**\n' + str(wikipedia.summary(query))
+        result = '**Wiki:**\n' + query + '\n\n**Results:**\n' + str(wikipedia.summary(query))
         update.effective_message.reply_markdown(result)
 
 __help__ = """
- ➡️ /wiki: Buscá en Wikipedia.
+ ➡️ /wiki: To get Some Information.
  """
 __mod_name__ = "Wikipedia"
 
