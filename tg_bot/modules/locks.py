@@ -106,7 +106,7 @@ def lock(bot: Bot, update: Update, args: List[str]) -> str:
         if len(args) >= 1:
             if args[0] in LOCK_TYPES:
                 sql.update_lock(chat.id, args[0], locked=True)
-                message.reply_text("Available locktypes {}.".format(args[0]))
+                message.reply_text("Locked {}.".format(args[0]))
 
                 return "<b>{}:</b>" \
                        "\n#LOCK" \
