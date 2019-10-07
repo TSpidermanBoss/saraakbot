@@ -3,6 +3,7 @@ import sys
 from contextlib import contextmanager, redirect_stdout
 from telegram import Update, Bot, ParseMode
 from telegram.ext import run_async
+from tg_bot.modules.helper_funcs.chat_status import user_admin
 
 from telegram.ext import Updater, CommandHandler
 from telegram.error import TimedOut, NetworkError
@@ -63,12 +64,12 @@ def send(msg, bot, update):
     LOGGER.info("OUT: '{}'".format(msg))
     bot.send_message(chat_id=update.effective_chat.id, text="`{}`".format(msg), parse_mode=ParseMode.MARKDOWN)
 
-
+@user_admin
 @run_async
 def evaluate(bot, update):
     send(do(eval, bot, update), bot, update)
 
-
+@user_admin
 @run_async
 def execute(bot, update):
     send(do(exec, bot, update), bot, update)
@@ -124,7 +125,7 @@ def do(func, bot, update):
                 result = 'Output is too long'
             return result
 
-
+@user_admin
 @run_async
 def clear(bot, update):
     log_input(update)
