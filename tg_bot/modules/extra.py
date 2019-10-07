@@ -255,7 +255,9 @@ __help__ = """
  - /tts <any text> : Converts text to speech
  - /rlg : Join ears,nose,mouth and create an emo ;-;
  - /zal <any text> : zalgofy! your tex Lyrics Plugin will take some moar time to come up.t
- -  /send - echo something (admin only)
+ - /send <any text>:  echo something (admin only)
+ - /react : get a reaction
+ - /gps <place> : get gps location
 """
 
 __mod_name__ = "Extras"
