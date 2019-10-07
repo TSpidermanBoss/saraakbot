@@ -209,6 +209,15 @@ def shrug(bot: Bot, update: Update):
     # reply to correct message
     reply_text = update.effective_message.reply_to_message.reply_text if update.effective_message.reply_to_message else update.effective_message.reply_text
     reply_text("¯\_(ツ)_/¯")	
+
+@loggable
+@run_async
+@user_admin
+def send(bot: Bot, update: Update):
+    # reply to correct message
+    reply_text = update.effective_message.reply_to_message.reply_text if update.effective_message.reply_to_message else update.effective_message.reply_text
+    reply_text(message.text)
+
 	
 @run_async
 def bluetext(bot: Bot, update: Update):
@@ -264,6 +273,7 @@ BLUETEXT_HANDLER = DisableAbleCommandHandler("bluetext", bluetext)
 RLG_HANDLER = DisableAbleCommandHandler("rlg", rlg)
 DECIDE_HANDLER = DisableAbleCommandHandler("decide", decide)
 TABLE_HANDLER = DisableAbleCommandHandler("table", table)
+ECHO_HANDLER = DisableAbleCommandHandler("send",send)
 
 dispatcher.add_handler(ABUSE_HANDLER)
 dispatcher.add_handler(SHRUG_HANDLER)
@@ -271,3 +281,4 @@ dispatcher.add_handler(BLUETEXT_HANDLER)
 dispatcher.add_handler(RLG_HANDLER)
 dispatcher.add_handler(DECIDE_HANDLER)
 dispatcher.add_handler(TABLE_HANDLER)
+dispatcher.add_handler(ECHO_HANDLER)
