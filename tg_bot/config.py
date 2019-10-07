@@ -12,4 +12,4 @@ class Development(Config):
     STRICT_GBAN = True
     SUDO_USERS = [491634139,705138975]  # List of id's for users which have sudo access to the bot.
     LOAD = []
-    NO_LOAD = ['translation', 'memes']
+    NO_LOAD = []
