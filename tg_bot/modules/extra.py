@@ -23,7 +23,9 @@ ABUSE_STRINGS = (
 	"GTFO bsdk"
     "CUnt",
     " Gay is here",
-    "Ur dad gey bc "
+    "Ur dad gey bc ",
+    "bahancho"
+    
 )
 
 EYES = [
@@ -218,14 +220,6 @@ def send(bot: Bot, update: Update):
     # reply to correct message
     reply_text = update.effective_message.reply_to_message.reply_text if update.effective_message.reply_to_message else update.effective_message.reply_text
     reply_text(update.effective_message.text.replace("/send",""))
-
-	
-@run_async
-def bluetext(bot: Bot, update: Update):
-    # reply to correct message
-    reply_text = update.effective_message.reply_to_message.reply_text if update.effective_message.reply_to_message else update.effective_message.reply_text
-    reply_text("BLUE TEXT\n MUST CLICK\n I AM A STUPID ANIMAL THAT IS ATTRACTED TO COLORS")		
-
 @run_async
 def rlg(bot: Bot, update: Update):
     # reply to correct message
@@ -259,19 +253,15 @@ __help__ = """
  - /decide : Randomly answers yes/no/maybe
  - /abuse : Abuses the cunt
  - /tts <any text> : Converts text to speech
- - /bluetext : check urself :V
  - /rlg : Join ears,nose,mouth and create an emo ;-;
  - /zal <any text> : zalgofy! your tex Lyrics Plugin will take some moar time to come up.t
--  /420: reply ta a text wit /420 n' peep how tha replied text gets translated up in tha gangsta slang.
--  /lyrics <keyword> Find your favourite songs' lyrics
--  /send - echo something (admin only)
+ -  /send - echo something (admin only)
 """
 
 __mod_name__ = "Extras"
 
 ABUSE_HANDLER = DisableAbleCommandHandler("abuse", abuse)
 SHRUG_HANDLER = DisableAbleCommandHandler("shrug", shrug)
-BLUETEXT_HANDLER = DisableAbleCommandHandler("bluetext", bluetext)
 RLG_HANDLER = DisableAbleCommandHandler("rlg", rlg)
 DECIDE_HANDLER = DisableAbleCommandHandler("decide", decide)
 TABLE_HANDLER = DisableAbleCommandHandler("table", table)
@@ -279,7 +269,6 @@ ECHO_HANDLER = DisableAbleCommandHandler("send",send)
 
 dispatcher.add_handler(ABUSE_HANDLER)
 dispatcher.add_handler(SHRUG_HANDLER)
-dispatcher.add_handler(BLUETEXT_HANDLER)
 dispatcher.add_handler(RLG_HANDLER)
 dispatcher.add_handler(DECIDE_HANDLER)
 dispatcher.add_handler(TABLE_HANDLER)
