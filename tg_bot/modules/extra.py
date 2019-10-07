@@ -197,17 +197,6 @@ EARS = [
     ['(∩', ')⊃━☆ﾟ.*'],
 ]
 
-TOSS = (
-    "Heads",
-    "Tails",
-)
-
-@run_async
-def roll(bot: Bot, update: Update):
-    update.message.reply_text(random.choice(range(1, 7)))
-	
-def toss(bot: Bot, update: Update):
-    update.message.reply_text(random.choice(TOSS))
 
 @run_async
 def abuse(bot: Bot, update: Update):
@@ -258,11 +247,9 @@ __help__ = """
  - /shrug : get shrug XD.
  - /table : get flip/unflip :v.
  - /decide : Randomly answers yes/no/maybe
- - /toss : Tosses A coin
  - /abuse : Abuses the cunt
  - /tts <any text> : Converts text to speech
  - /bluetext : check urself :V
- - /roll : Roll a dice.
  - /rlg : Join ears,nose,mouth and create an emo ;-;
  - /zal <any text> : zalgofy! your tex Lyrics Plugin will take some moar time to come up.t
 -  /420: reply ta a text wit /420 n' peep how tha replied text gets translated up in tha gangsta slang.
@@ -272,8 +259,6 @@ __help__ = """
 __mod_name__ = "Extras"
 
 ABUSE_HANDLER = DisableAbleCommandHandler("abuse", abuse)
-ROLL_HANDLER = DisableAbleCommandHandler("roll", roll)
-TOSS_HANDLER = DisableAbleCommandHandler("toss", toss)
 SHRUG_HANDLER = DisableAbleCommandHandler("shrug", shrug)
 BLUETEXT_HANDLER = DisableAbleCommandHandler("bluetext", bluetext)
 RLG_HANDLER = DisableAbleCommandHandler("rlg", rlg)
@@ -281,8 +266,6 @@ DECIDE_HANDLER = DisableAbleCommandHandler("decide", decide)
 TABLE_HANDLER = DisableAbleCommandHandler("table", table)
 
 dispatcher.add_handler(ABUSE_HANDLER)
-dispatcher.add_handler(ROLL_HANDLER)
-dispatcher.add_handler(TOSS_HANDLER)
 dispatcher.add_handler(SHRUG_HANDLER)
 dispatcher.add_handler(BLUETEXT_HANDLER)
 dispatcher.add_handler(RLG_HANDLER)
