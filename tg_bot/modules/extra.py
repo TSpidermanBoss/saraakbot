@@ -5,10 +5,10 @@ from telegram import MessageEntity
 from telegram.ext import Filters, MessageHandler, run_async
 from tg_bot.modules.helper_funcs.chat_status import user_admin
 from tg_bot.modules.log_channel import loggable
-
-
 from tg_bot import dispatcher
 from tg_bot.modules.disable import DisableAbleCommandHandler
+
+msg = update.effective_message
 
 ABUSE_STRINGS = (
     "Fuck off",
