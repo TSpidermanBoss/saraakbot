@@ -39,7 +39,11 @@ def mute(bot: Bot, update: Update, args: List[str]) -> str:
             message.reply_text("Afraid I can't stop an admin from talking!")
 
         elif member.can_send_messages is None or member.can_send_messages:
-            bot.restrict_chat_member(chat.id, user_id, can_send_messages=False)
+            bot.restrict_chat_member(chat.id, int(user_id),
+                                         can_send_messages=False,
+                                         can_send_media_messages=False,
+                                         can_send_other_messages=False,
+                                         can_add_web_page_previews=False)
             message.reply_text("Muted!")
             return "<b>{}:</b>" \
                    "\n#MUTE" \
