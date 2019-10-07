@@ -263,6 +263,7 @@ __help__ = """
  - /zal <any text> : zalgofy! your tex Lyrics Plugin will take some moar time to come up.t
 -  /420: reply ta a text wit /420 n' peep how tha replied text gets translated up in tha gangsta slang.
 -  /lyrics <keyword> Find your favourite songs' lyrics
+-  /send - echo something (admin only)
 """
 
 __mod_name__ = "Extras"
