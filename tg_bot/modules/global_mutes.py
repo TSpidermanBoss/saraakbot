@@ -8,7 +8,7 @@ from telegram.ext import run_async, CommandHandler, MessageHandler, Filters
 from telegram.utils.helpers import mention_html
 
 import tg_bot.modules.sql.global_mutes_sql as sql
-from tg_bot import dispatcher, OWNER_ID, SUDO_USERS, SECRET_SUDO_USERS, SUPPORT_USERS, STRICT_GMUTE
+from tg_bot import dispatcher, OWNER_ID, SUDO_USERS, SUPPORT_USERS, STRICT_GMUTE
 from tg_bot.modules.helper_funcs.chat_status import user_admin, is_user_admin
 from tg_bot.modules.helper_funcs.extraction import extract_user, extract_user_and_text
 from tg_bot.modules.helper_funcs.filters import CustomFilters
@@ -32,10 +32,6 @@ def gmute(bot: Bot, update: Update, args: List[str]):
         message.reply_text("I spy, with my little eye... a sudo user war! Why are you guys turning on each other?")
         return
 
-    if int(user_id) in SECRET_SUDO_USERS:
-        message.reply_text("Sar He is a secret sudo user *Grabs Ak47*")
-        return
-    
     if int(user_id) in SUPPORT_USERS:
         message.reply_text("OOOH someone's trying to gmute a support user! *grabs popcorn*")
         return
@@ -68,20 +64,14 @@ def gmute(bot: Bot, update: Update, args: List[str]):
 
         return
 
+    message.reply_text("*Gets duct tape ready* 😉")
 
     muter = update.effective_user  # type: Optional[User]
     send_to_list(bot, SUDO_USERS + SUPPORT_USERS,
-                 "<b>Global Mute</b>" \
-                 "\n#GMUTE" \
-                 "\n<b>Status:</b> <code>Enforcing</code>" \
-                 "\n<b>Admin:</b> {}" \
-                 "\n<b>User:</b> {}" \
-                 "\n<b>ID:</b> <code>{}</code>" \
-                 "\n<b>Reason:</b> {}".format(mention_html(muter.id, muter.first_name),
-                                              mention_html(user_chat.id, user_chat.first_name), 
-                                                           user_chat.id, reason or "No reason given"), 
+                 "{} is gmuting user {} "
+                 "because:\n{}".format(mention_html(muter.id, muter.first_name),
+                                       mention_html(user_chat.id, user_chat.first_name), reason or "No reason given"),
                  html=True)
-
 
     sql.gmute_user(user_id, user_chat.username or user_chat.first_name, reason)
 
@@ -126,9 +116,8 @@ def gmute(bot: Bot, update: Update, args: List[str]):
         except TelegramError:
             pass
 
-    send_to_list(bot, SUDO_USERS + SUPPORT_USERS, 
-                  "{} has been successfully gmuted!".format(mention_html(user_chat.id, user_chat.first_name)),
-                html=True)
+    send_to_list(bot, SUDO_USERS + SUPPORT_USERS, "gmute complete!")
+    message.reply_text("Person has been gmuted.")
 
 
 @run_async
@@ -151,18 +140,12 @@ def ungmute(bot: Bot, update: Update, args: List[str]):
 
     muter = update.effective_user  # type: Optional[User]
 
+    message.reply_text("I'll let {} speak again, globally.".format(user_chat.first_name))
 
     send_to_list(bot, SUDO_USERS + SUPPORT_USERS,
-                 "<b>Regression of Global Mute</b>" \
-                 "\n#UNGMUTE" \
-                 "\n<b>Status:</b> <code>Ceased</code>" \
-                 "\n<b>Admin:</b> {}" \
-                 "\n<b>User:</b> {}" \
-                 "\n<b>ID:</b> <code>{}</code>".format(mention_html(muter.id, muter.first_name),
-                                                       mention_html(user_chat.id, user_chat.first_name), 
-                                                                    user_chat.id),
+                 "{} has ungmuted user {}".format(mention_html(muter.id, muter.first_name),
+                                                   mention_html(user_chat.id, user_chat.first_name)),
                  html=True)
-
 
     chats = get_all_chats()
     for chat in chats:
@@ -207,11 +190,9 @@ def ungmute(bot: Bot, update: Update, args: List[str]):
 
     sql.ungmute_user(user_id)
 
-    send_to_list(bot, SUDO_USERS + SUPPORT_USERS, 
-                  "{} has been successfully un-gmuted!".format(mention_html(user_chat.id, 
-                                                                         user_chat.first_name)),
-                  html=True)
+    send_to_list(bot, SUDO_USERS + SUPPORT_USERS, "un-gmute complete!")
 
+    message.reply_text("Person has been un-gmuted.")
 
 
 @run_async
@@ -306,12 +287,22 @@ def __chat_settings__(chat_id, user_id):
     return "This chat is enforcing *gmutes*: `{}`.".format(sql.does_chat_gmute(chat_id))
 
 
+__help__ = """
+*Admin only:*
+ - /gmutestat <on/off/yes/no>: Will disable the effect of global mutes on your group, or return your current settings.
+Gmutes, also known as global mutes, are used by the bot owners to mute spammers across all groups. This helps protect \
+you and your groups by removing spam flooders as quickly as possible. They can be disabled for you group by calling \
+/gmutestat
+"""
+
+__mod_name__ = "Global Mutes"
+
 GMUTE_HANDLER = CommandHandler("gmute", gmute, pass_args=True,
-                              filters=CustomFilters.sudo_filter | CustomFilters.support_filter | CustomFilters.secret_sudo_filter)
+                              filters=CustomFilters.sudo_filter | CustomFilters.support_filter)
 UNGMUTE_HANDLER = CommandHandler("ungmute", ungmute, pass_args=True,
-                                filters=CustomFilters.sudo_filter | CustomFilters.support_filter | CustomFilters.secret_sudo_filter)
+                                filters=CustomFilters.sudo_filter | CustomFilters.support_filter)
 GMUTE_LIST = CommandHandler("gmutelist", gmutelist,
-                           filters=CustomFilters.sudo_filter | CustomFilters.support_filter | CustomFilters.secret_sudo_filter)
+                           filters=CustomFilters.sudo_filter | CustomFilters.support_filter)
 
 GMUTE_STATUS = CommandHandler("gmutestat", gmutestat, pass_args=True, filters=Filters.group)
 
