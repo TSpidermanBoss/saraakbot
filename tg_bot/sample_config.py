@@ -35,6 +35,7 @@ class Config(object):
     WORKERS = 8  # Number of subthreads to use. This is the recommended amount - see for yourself what works best!
     BAN_STICKER = 'CAADAgADDgMAAn7yxQy_Mq4KRRFcixYE'  # banhammer marie sticker
     ALLOW_EXCL = False  # Allow ! commands as well as /
+    API_OPENWEATHER = "7db5e7eb9b71af318e45da286077dd37" # OpenWeather API
 
 
 class Production(Config):
