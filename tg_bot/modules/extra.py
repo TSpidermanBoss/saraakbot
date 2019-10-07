@@ -217,7 +217,7 @@ def shrug(bot: Bot, update: Update):
 def send(bot: Bot, update: Update):
     # reply to correct message
     reply_text = update.effective_message.reply_to_message.reply_text if update.effective_message.reply_to_message else update.effective_message.reply_text
-    reply_text( update.effective_message.text)
+    reply_text(update.effective_message.text.replace("/send",""))
 
 	
 @run_async
