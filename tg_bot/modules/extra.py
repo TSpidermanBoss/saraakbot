@@ -204,7 +204,7 @@ TOSS = ["Result: Heads" , "Result: Tails" ]
 mai = ["2","3","4","5","6","7","8","9","10","A","K","J","Q"] 
 sec =["♣️","♠️","♥️","♦️"]
 mz = ["1","2","3","4","5","6","7","8","9","10"]
-b = random.choice(["3","2","3","dot ball","4","2","no ball","1","2","Run out","4","wide ball","1","6","🚾 Wicket 🚾","3","4","2","3","catch out","6","4","3"])
+b = ["3","2","3","dot ball","4","2","no ball","1","2","Run out","4","wide ball","1","6","🚾 Wicket 🚾","3","4","2","3","catch out","6","4","3"]
 
 @run_async
 def abuse(bot: Bot, update: Update):
