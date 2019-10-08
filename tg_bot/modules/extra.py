@@ -204,10 +204,7 @@ TOSS = ["Result: Heads" , "Result: Tails" ]
 mai = ["2","3","4","5","6","7","8","9","10","A","K","J","Q"] 
 sec =["♣️","♠️","♥️","♦️"]
 mz = ["1","2","3","4","5","6","7","8","9","10"]
-b = random.choice(["3","2","3","4","2","1","2","4","1","6","3","4","2","3","6","4","3"])
-n = random.choice(["Run out","catch out","🚾 Wicket 🚾"])
-m = random.choice(["dot ball","wide ball","no ball"])
-
+b = random.choice(["3","2","3","dot ball","4","2","no ball","1","2","Run out","4","wide ball","1","6","🚾 Wicket 🚾","3","4","2","3","catch out","6","4","3"])
 
 @run_async
 def abuse(bot: Bot, update: Update):
@@ -234,6 +231,9 @@ def shows(bot: Bot, update: Update):
     x = random.choice(mai)
     z = random.choice(sec)
     update.message.reply_text(x + z)
+    update.message.reply_text(x + z)
+    update.message.reply_text(x + z)
+
 @loggable
 @run_async
 @user_admin
@@ -244,7 +244,7 @@ def roll(bot: Bot, update: Update):
 @run_async
 @user_admin
 def ball(bot: Bot, update: Update):
-    x = random.choice([b,n,m])
+    x = random.choice(b)
     update.message.reply_text(x)
 
 @loggable
