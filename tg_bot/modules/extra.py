@@ -200,6 +200,14 @@ EARS = [
     ['(∩', ')⊃━☆ﾟ.*'],
 ]
 
+TOSS = ["Result: Heads" , "Result: Tails" ]
+mai = ["2","3","4","5","6","7","8","9",10","A","K","J","Q"] 
+sec =["♣️","♠️","♥️","♦️"]
+mz = ["1","2","3","4","5","6","7","8","9","10"]
+b = random.choice(["3","2","3","4","2","1","2","4","1","6","3","4","2","3","6","4","3"])
+n = random.choice(["Run out","catch out","🚾 Wicket 🚾"])
+m = random.choice(["dot ball","wide ball","no ball"])
+
 
 @run_async
 def abuse(bot: Bot, update: Update):
@@ -212,6 +220,32 @@ def shrug(bot: Bot, update: Update):
     # reply to correct message
     reply_text = update.effective_message.reply_to_message.reply_text if update.effective_message.reply_to_message else update.effective_message.reply_text
     reply_text("¯\_(ツ)_/¯")	
+
+@loggable
+@run_async
+@user_admin
+def toss(bot: Bot, update: Update):
+    x = random.choice(TOSS)
+    update.message.reply_text(x)
+@loggable
+@run_async
+@user_admin
+def shows(bot: Bot, update: Update):
+    x = random.choice(mai)
+    z = random.choice(sec)
+    update.message.reply_text(x + z)
+@loggable
+@run_async
+@user_admin
+def roll(bot: Bot, update: Update):
+    x = random.choice(mz)
+    update.message.reply_text(x)
+@loggable
+@run_async
+@user_admin
+def ball(bot: Bot, update: Update):
+    x = random.choice([b,n,m])
+    update.message.reply_text(x)
 
 @loggable
 @run_async
@@ -258,6 +292,10 @@ __help__ = """
  - /send <any text>:  echo something (admin only)
  - /react : get a reaction
  - /gps <place> : get gps location
+ - /coin : clip a coin ( toss )
+ - /shows : play teen pati
+ - /rols : roll Numbers (1 - 10)
+ - /bl : play a ball
 """
 
 __mod_name__ = "Extras"
@@ -268,6 +306,10 @@ RLG_HANDLER = DisableAbleCommandHandler("rlg", rlg)
 DECIDE_HANDLER = DisableAbleCommandHandler("decide", decide)
 TABLE_HANDLER = DisableAbleCommandHandler("table", table)
 ECHO_HANDLER = DisableAbleCommandHandler("send",send)
+TOSS_HANDLER = DisableAbleCommandHandler("coin",toss)
+TEEN_HANDLER = DisableAbleCommandHandler("shows",shows)
+ROLL_HANDLER = DisableAbleCommandHandler("rols",roll)
+BALL_HANDLER = DisableAbleCommandHandler("bl",ball)
 
 dispatcher.add_handler(ABUSE_HANDLER)
 dispatcher.add_handler(SHRUG_HANDLER)
@@ -275,3 +317,7 @@ dispatcher.add_handler(RLG_HANDLER)
 dispatcher.add_handler(DECIDE_HANDLER)
 dispatcher.add_handler(TABLE_HANDLER)
 dispatcher.add_handler(ECHO_HANDLER)
+dispatcher.add_handler(TOSS_HANDLER)
+dispatcher.add_handler(TEEN_HANDLER)
+dispatcher.add_handler(ROLL_HANDLER)
+dispatcher.add_handler(BALL_HANDLER)
