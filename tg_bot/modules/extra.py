@@ -230,9 +230,13 @@ def toss(bot: Bot, update: Update):
 def shows(bot: Bot, update: Update):
     x = random.choice(mai)
     z = random.choice(sec)
+    c = random.choice(mai)
+    p = random.choice(sec)
+    l = random.choice(mai)
+    g = random.choice(sec)
     update.message.reply_text(x + z)
-    update.message.reply_text(x + z)
-    update.message.reply_text(x + z)
+    update.message.reply_text(c + p)
+    update.message.reply_text(l + g)
 
 @loggable
 @run_async
