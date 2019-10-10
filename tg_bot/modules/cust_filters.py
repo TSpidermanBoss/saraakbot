@@ -18,61 +18,37 @@ from tg_bot.modules.helper_funcs.string_handling import split_quotes, button_mar
 from tg_bot.modules.sql import cust_filters_sql as sql
 
 HANDLER_GROUP = 10
+BASIC_FILTER_STRING = "*List of filters in {}:*\n"
 
 
 @run_async
 def list_handlers(bot: Bot, update: Update):
     chat = update.effective_chat  # type: Optional[Chat]
-    user = update.effective_user  # type: Optional[User]
-    
-    conn = connected(bot, update, chat, user.id, need_admin=False)
-    if not conn == False:
-        chat_id = conn
-        chat_name = dispatcher.bot.getChat(conn).title
-        filter_list = "*Filters in {}:*\n"
-    else:
-        chat_id = update.effective_chat.id
-        if chat.type == "private":
-            chat_name = "local filters"
-            filter_list = "*local filters:*\n"
-        else:
-            chat_name = chat.title
-            filter_list = "*Filters in {}*:\n"
-
-    all_handlers = sql.get_chat_triggers(chat_id)
-
+    all_handlers = sql.get_chat_triggers(chat.id)
+    chat_name = chat.title or chat.first or chat.username
     if not all_handlers:
-        update.effective_message.reply_text("No filters in {}!".format(chat_name))
+        update.effective_message.reply_text("No filters are active here!")
         return
 
+    filter_list = BASIC_FILTER_STRING
     for keyword in all_handlers:
-        entry = " • `{}`\n".format(escape_markdown(keyword))
+        entry = " • `{}`\n".format((keyword))
         if len(entry) + len(filter_list) > telegram.MAX_MESSAGE_LENGTH:
-            update.effective_message.reply_text(filter_list.format(chat_name), parse_mode=telegram.ParseMode.MARKDOWN)
+            update.effective_message.reply_text(filter_list, parse_mode=telegram.ParseMode.MARKDOWN)
             filter_list = entry
         else:
             filter_list += entry
 
-    update.effective_message.reply_text(filter_list.format(chat_name), parse_mode=telegram.ParseMode.MARKDOWN)
+    if not filter_list == BASIC_FILTER_STRING:
+        update.effective_message.reply_text(filter_list.format(chat_name), parse_mode=telegram.ParseMode.MARKDOWN)
+
 
 # NOT ASYNC BECAUSE DISPATCHER HANDLER RAISED
 @user_admin
 def filters(bot: Bot, update: Update):
     chat = update.effective_chat  # type: Optional[Chat]
-    user = update.effective_user  # type: Optional[User]
     msg = update.effective_message  # type: Optional[Message]
     args = msg.text.split(None, 1)  # use python's maxsplit to separate Cmd, keyword, and reply_text
-
-    conn = connected(bot, update, chat, user.id)
-    if not conn == False:
-        chat_id = conn
-        chat_name = dispatcher.bot.getChat(conn).title
-    else:
-        chat_id = update.effective_chat.id
-        if chat.type == "private":
-            chat_name = "local notes"
-        else:
-            chat_name = chat.title
 
     if len(args) < 2:
         return
@@ -131,13 +107,13 @@ def filters(bot: Bot, update: Update):
     # Add the filter
     # Note: perhaps handlers can be removed somehow using sql.get_chat_filters
     for handler in dispatcher.handlers.get(HANDLER_GROUP, []):
-        if handler.filters == (keyword, chat_id):
+        if handler.filters == (keyword, chat.id):
             dispatcher.remove_handler(handler, HANDLER_GROUP)
 
-    sql.add_filter(chat_id, keyword, content, is_sticker, is_document, is_image, is_audio, is_voice, is_video,
+    sql.add_filter(chat.id, keyword, content, is_sticker, is_document, is_image, is_audio, is_voice, is_video,
                    buttons)
 
-    msg.reply_text("Handler '{}' added in *{}*!".format(keyword, chat_name), parse_mode=telegram.ParseMode.MARKDOWN)
+    update.effective_message.reply_text("Filter has been saved for '`{}`'.".format(keyword), parse_mode=ParseMode.MARKDOWN)
     raise DispatcherHandlerStop
 
 
@@ -145,24 +121,12 @@ def filters(bot: Bot, update: Update):
 @user_admin
 def stop_filter(bot: Bot, update: Update):
     chat = update.effective_chat  # type: Optional[Chat]
-    user = update.effective_user  # type: Optional[User]
     args = update.effective_message.text.split(None, 1)
-
-    conn = connected(bot, update, chat, user.id)
-    if not conn == False:
-        chat_id = conn
-        chat_name = dispatcher.bot.getChat(conn).title
-    else:
-        chat_id = update.effective_chat.id
-        if chat.type == "private":
-            chat_name = "local notes"
-        else:
-            chat_name = chat.title
 
     if len(args) < 2:
         return
 
-    chat_filters = sql.get_chat_triggers(chat_id)
+    chat_filters = sql.get_chat_triggers(chat.id)
 
     if not chat_filters:
         update.effective_message.reply_text("No filters are active here!")
@@ -170,8 +134,8 @@ def stop_filter(bot: Bot, update: Update):
 
     for keyword in chat_filters:
         if keyword == args[1]:
-            sql.remove_filter(chat_id, args[1])
-            update.effective_message.reply_text("Yep, I'll stop replying to that in *{}*.".format(chat_name), parse_mode=telegram.ParseMode.MARKDOWN)
+            sql.remove_filter(chat.id, args[1])
+            update.effective_message.reply_text("Removed '`{}`', I will no longer reply to that!".format(keyword), parse_mode=ParseMode.MARKDOWN)
             raise DispatcherHandlerStop
 
     update.effective_message.reply_text("That's not a current filter - run /filters for all active filters.")
@@ -215,14 +179,14 @@ def reply_filter(bot: Bot, update: Update):
                     if excp.message == "Unsupported url protocol":
                         message.reply_text("You seem to be trying to use an unsupported url protocol. Telegram "
                                            "doesn't support buttons for some protocols, such as tg://. Please try "
-                                           "again, or ask in @YanaBotGroup for help.")
+                                           "again, or ask in @MarieSupport for help.")
                     elif excp.message == "Reply message not found":
                         bot.send_message(chat.id, filt.reply, parse_mode=ParseMode.MARKDOWN,
                                          disable_web_page_preview=True,
                                          reply_markup=keyboard)
                     else:
                         message.reply_text("This note could not be sent, as it is incorrectly formatted. Ask in "
-                                           "@YanaBotGroup if you can't figure out why!")
+                                           "@MarieSupport if you can't figure out why!")
                         LOGGER.warning("Message %s could not be parsed", str(filt.reply))
                         LOGGER.exception("Could not parse filter %s in chat %s", str(filt.keyword), str(chat.id))
 
@@ -258,8 +222,8 @@ doin?
 
 __mod_name__ = "Filters"
 
-FILTER_HANDLER = CommandHandler("filter", filters)
-STOP_HANDLER = CommandHandler("stop", stop_filter)
+FILTER_HANDLER = DisableAbleCommandHandler("filter", filters)
+STOP_HANDLER = DisableAbleCommandHandler("stop", stop_filter)
 LIST_HANDLER = DisableAbleCommandHandler("filters", list_handlers, admin_ok=True)
 CUST_FILTER_HANDLER = MessageHandler(CustomFilters.has_text, reply_filter)
 
