@@ -1,6 +1,6 @@
 import html
 from typing import Optional, List
-
+import telegram
 import telegram.ext as tg
 from telegram import Message, Chat, Update, Bot, ParseMode, User, MessageEntity
 from telegram import TelegramError
