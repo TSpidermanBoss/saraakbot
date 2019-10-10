@@ -1,6 +1,6 @@
 import html
 from typing import Optional, List
-
+import telegram
 from telegram import Message, Chat, Update, Bot, User
 from telegram.error import BadRequest
 from telegram.ext import CommandHandler, Filters
@@ -41,7 +41,7 @@ def mute(bot: Bot, update: Update, args: List[str]) -> str:
 
         elif member.can_send_messages is None or member.can_send_messages:
             bot.restrict_chat_member(chat.id, user_id, can_send_messages=False)
-            message.reply_text("`Muted!`")
+            message.reply_text("`Muted!`",parse_mode=telegram.ParseMode.MARKDOWN )
             return "<b>{}:</b>" \
                    "\n#MUTE" \
                    "\n<b>Admin:</b> {}" \
@@ -89,7 +89,7 @@ def unmute(bot: Bot, update: Update, args: List[str]) -> str:
                                          can_send_media_messages=True,
                                          can_send_other_messages=True,
                                          can_add_web_page_previews=True)
-                message.reply_text("`Unmuted!`")
+                message.reply_text("`Unmuted!`",parse_mode=telegram.ParseMode.MARKDOWN )
                 return "<b>{}:</b>" \
                        "\n#UNMUTE" \
                        "\n<b>Admin:</b> {}" \
