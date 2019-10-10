@@ -17,25 +17,25 @@ from tg_bot.modules.helper_funcs.chat_status import can_delete, is_user_admin, u
 from tg_bot.modules.log_channel import loggable
 from tg_bot.modules.sql import users_sql
 
-LOCK_TYPES = {'stickers': Filters.sticker,
+LOCK_TYPES = {'sticker': Filters.sticker,
               'audio': Filters.audio,
               'voice': Filters.voice,
-              'documents': Filters.document & ~Filters.animation,
-              'videos': Filters.video,
-              'videonotes': Filters.video_note,
-              'contacts': Filters.contact,
-              'photos': Filters.photo,
-              'gifs': Filters.animation,
-              'urls': Filters.entity(MessageEntity.URL) | Filters.caption_entity(MessageEntity.URL),
+              'document': Filters.document & ~Filters.animation,
+              'video': Filters.video,
+              'videonote': Filters.video_note,
+              'contact': Filters.contact,
+              'photo': Filters.photo,
+              'gif': Filters.animation,
+              'url': Filters.entity(MessageEntity.URL) | Filters.caption_entity(MessageEntity.URL),
               'bots': Filters.status_update.new_chat_members,
-              'forwards': Filters.forwarded,
-              'games': Filters.game,
-              'locations': Filters.location,
+              'forward': Filters.forwarded,
+              'game': Filters.game,
+              'location': Filters.location,
               }
 
 GIF = Filters.animation
 OTHER = Filters.game | Filters.sticker | GIF
-MEDIA = Filters.audio | Filters.document | Filters.video | Filters.video_note | Filters.voice | Filters.photo
+MEDIA = Filters.audio | Filters.document | Filters.video | Filters.voice | Filters.photo
 MESSAGES = Filters.text | Filters.contact | Filters.location | Filters.venue | Filters.command | MEDIA | OTHER
 PREVIEWS = Filters.entity("url")
 
@@ -106,7 +106,7 @@ def lock(bot: Bot, update: Update, args: List[str]) -> str:
         if len(args) >= 1:
             if args[0] in LOCK_TYPES:
                 sql.update_lock(chat.id, args[0], locked=True)
-                message.reply_text("Locked {}.".format(args[0]))
+                message.reply_text(" ``` Locked {} ``` ".format(args[0]))
 
                 return "<b>{}:</b>" \
                        "\n#LOCK" \
@@ -120,7 +120,7 @@ def lock(bot: Bot, update: Update, args: List[str]) -> str:
                     members = users_sql.get_chat_members(str(chat.id))
                     restr_members(bot, chat.id, members, messages=True, media=True, other=True)
 
-                message.reply_text("Locked {}.".format(args[0]))
+                message.reply_text(" ``` Locked {} ``` ".format(args[0]))
                 return "<b>{}:</b>" \
                        "\n#LOCK" \
                        "\n<b>Admin:</b> {}" \
@@ -147,7 +147,7 @@ def unlock(bot: Bot, update: Update, args: List[str]) -> str:
         if len(args) >= 1:
             if args[0] in LOCK_TYPES:
                 sql.update_lock(chat.id, args[0], locked=False)
-                message.reply_text("Unlocked {}.".format(args[0]))
+                message.reply_text("```Unlocked {} ``` ".format(args[0]))
                 return "<b>{}:</b>" \
                        "\n#UNLOCK" \
                        "\n<b>Admin:</b> {}" \
@@ -173,7 +173,7 @@ def unlock(bot: Bot, update: Update, args: List[str]) -> str:
                 elif args[0] == "all":
                     unrestr_members(bot, chat.id, members, True, True, True, True)
                 """
-                message.reply_text("Unlocked {}.".format(args[0]))
+                message.reply_text(" ```Unlocked {} ``` ".format(args[0]))
 
                 return "<b>{}:</b>" \
                        "\n#UNLOCK" \
@@ -207,7 +207,7 @@ def del_lockables(bot: Bot, update: Update):
                             return
 
                         chat.kick_member(new_mem.id)
-                        message.reply_text("🤖 Bot not allowed.")
+                        message.reply_text("Only admins are allowed to add bots to this chat! Get outta here.")
             else:
                 try:
                     message.delete()
@@ -290,6 +290,12 @@ def __chat_settings__(chat_id, user_id):
 
 
 __help__ = """
+Do stickers annoy you? or want to avoid people sharing links? or pictures? \
+You're in the right place!
+
+The locks module allows you to lock away some common items in the \
+telegram world; the bot will automatically delete them!
+
  - /locktypes: a list of possible locktypes
 
 *Admin only:*
@@ -299,7 +305,7 @@ __help__ = """
 
 Locks can be used to restrict a group's users.
 eg:
-Locking urls will auto-delete all messages with urls which haven't been whitelisted, locking stickers will delete all \
+Locking urls will auto-delete all messages with urls, locking stickers will delete all \
 stickers, etc.
 Locking bots will stop non-admins from adding bots to the chat.
 """
@@ -307,9 +313,9 @@ Locking bots will stop non-admins from adding bots to the chat.
 __mod_name__ = "Locks"
 
 LOCKTYPES_HANDLER = DisableAbleCommandHandler("locktypes", locktypes)
-LOCK_HANDLER = CommandHandler("lock", lock, pass_args=True, filters=Filters.group)
-UNLOCK_HANDLER = CommandHandler("unlock", unlock, pass_args=True, filters=Filters.group)
-LOCKED_HANDLER = CommandHandler("locks", list_locks, filters=Filters.group)
+LOCK_HANDLER = DisableAbleCommandHandler("lock", lock, pass_args=True, filters=Filters.group)
+UNLOCK_HANDLER = DisableAbleCommandHandler("unlock", unlock, pass_args=True, filters=Filters.group)
+LOCKED_HANDLER = DisableAbleCommandHandler("locks", list_locks, filters=Filters.group)
 
 dispatcher.add_handler(LOCK_HANDLER)
 dispatcher.add_handler(UNLOCK_HANDLER)
