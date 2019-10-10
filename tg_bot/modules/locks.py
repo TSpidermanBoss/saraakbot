@@ -106,7 +106,7 @@ def lock(bot: Bot, update: Update, args: List[str]) -> str:
         if len(args) >= 1:
             if args[0] in LOCK_TYPES:
                 sql.update_lock(chat.id, args[0], locked=True)
-                message.reply_text(" ``Locked {}`` ".format(args[0]),parse_mode=telegram.ParseMode.MARKDOWN )
+                message.reply_text("`Locked {}`".format(args[0]),parse_mode=telegram.ParseMode.MARKDOWN )
 
                 return "<b>{}:</b>" \
                        "\n#LOCK" \
@@ -120,7 +120,7 @@ def lock(bot: Bot, update: Update, args: List[str]) -> str:
                     members = users_sql.get_chat_members(str(chat.id))
                     restr_members(bot, chat.id, members, messages=True, media=True, other=True)
 
-                message.reply_text(" ``Locked {}``  ".format(args[0]),parse_mode=telegram.ParseMode.MARKDOWN )
+                message.reply_text("`Locked {}`".format(args[0]),parse_mode=telegram.ParseMode.MARKDOWN )
                 return "<b>{}:</b>" \
                        "\n#LOCK" \
                        "\n<b>Admin:</b> {}" \
@@ -147,7 +147,7 @@ def unlock(bot: Bot, update: Update, args: List[str]) -> str:
         if len(args) >= 1:
             if args[0] in LOCK_TYPES:
                 sql.update_lock(chat.id, args[0], locked=False)
-                message.reply_text(" ``Unlocked {}`` ".format(args[0]),parse_mode=telegram.ParseMode.MARKDOWN )
+                message.reply_text("`Unlocked {}`".format(args[0]),parse_mode=telegram.ParseMode.MARKDOWN )
                 return "<b>{}:</b>" \
                        "\n#UNLOCK" \
                        "\n<b>Admin:</b> {}" \
@@ -173,7 +173,7 @@ def unlock(bot: Bot, update: Update, args: List[str]) -> str:
                 elif args[0] == "all":
                     unrestr_members(bot, chat.id, members, True, True, True, True)
                 """
-                message.reply_text(" ``Unlocked {}`` ".format(args[0]),parse_mode=telegram.ParseMode.MARKDOWN )
+                message.reply_text("`Unlocked {}`".format(args[0]),parse_mode=telegram.ParseMode.MARKDOWN )
 
                 return "<b>{}:</b>" \
                        "\n#UNLOCK" \
