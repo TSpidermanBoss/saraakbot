@@ -23,6 +23,7 @@ Hi {}, my name is {}! If you have any questions on how to use me, read /help .
 
 I'm a group manager bot maintained by [Surendra](tg://user?id={}). 
 
+I also have a news channel, @AnushkaNews for announcements on new features, downtime, etc.
 
 You can find the list of available commands with /help.
 
