@@ -2,49 +2,45 @@ from typing import List
 import requests
 from telegram import Message, Update, Bot, MessageEntity
 from telegram.ext import CommandHandler, run_async
-from haruka import dispatcher
-from haruka.modules.disable import DisableAbleCommandHandler
+from tg_bot import dispatcher
+from tg_bot.modules.disable import DisableAbleCommandHandler
 import pynewtonmath as newton
 import math
-
-def join(args):
-    x = ''.join(map(str, args))
-    return x
 
 @run_async
 def simplify(bot: Bot, update: Update, args: List[str]):
     message = update.effective_message
-    message.reply_text(newton.simplify('{}'.format(join(args))))
+    message.reply_text(newton.simplify('{}'.format(args[0])))
 
 @run_async
 def factor(bot: Bot, update: Update, args: List[str]):
     message = update.effective_message
-    message.reply_text(newton.factor('{}'.format(join(args))))
+    message.reply_text(newton.factor('{}'.format(args[0])))
 
 @run_async
 def derive(bot: Bot, update: Update, args: List[str]):
     message = update.effective_message
-    message.reply_text(newton.derive('{}'.format(join(args))))
+    message.reply_text(newton.derive('{}'.format(args[0])))
 
 @run_async
 def integrate(bot: Bot, update: Update, args: List[str]):
     message = update.effective_message
-    message.reply_text(newton.integrate('{}'.format(join(args))))
+    message.reply_text(newton.integrate('{}'.format(args[0])))
 
 @run_async
 def zeroes(bot: Bot, update: Update, args: List[str]):
     message = update.effective_message
-    message.reply_text(newton.zeroes('{}'.format(join(args))))
+    message.reply_text(newton.zeroes('{}'.format(args[0])))
 
 @run_async
 def tangent(bot: Bot, update: Update, args: List[str]):
     message = update.effective_message
-    message.reply_text(newton.tangent('{}'.format(join(args))))
+    message.reply_text(newton.tangent('{}'.format(args[0])))
 
 @run_async
 def area(bot: Bot, update: Update, args: List[str]):
     message = update.effective_message
-    message.reply_text(newton.area('{}'.format(join(args))))
+    message.reply_text(newton.area('{}'.format(args[0])))
 
 @run_async
 def cos(bot: Bot, update: Update, args):
@@ -141,3 +137,4 @@ dispatcher.add_handler(ARCSIN_HANDLER)
 dispatcher.add_handler(ARCTAN_HANDLER)
 dispatcher.add_handler(ABS_HANDLER)
 dispatcher.add_handler(LOG_HANDLER)
+
